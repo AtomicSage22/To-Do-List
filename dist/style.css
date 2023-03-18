@@ -58,6 +58,10 @@ nav img{
     align-self: center;
 }
 
+nav img:hover{
+    cursor: pointer;
+}
+
 .contents{
     grid-area: "contents";
     position: relative;
@@ -68,6 +72,10 @@ nav img{
     position: absolute;
     right: 1rem;
     bottom: 1rem;
+}
+
+#add-todo:hover{
+    cursor: pointer;
 }
 
 .to-do{
@@ -92,6 +100,10 @@ nav img{
     width: 1.3rem;
     position: absolute;
     right: 2rem;
+}
+
+.to-do img:hover{
+    cursor: pointer;
 }
 
 .to-do p{
@@ -169,6 +181,10 @@ nav img{
     color: #CBE4DE;
     margin-bottom: 1rem;
     padding-top: 0.4rem;
+}
+
+.project-title-list:hover{
+    cursor: pointer;
 }
 
 .todo-creation{

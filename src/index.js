@@ -1,5 +1,5 @@
 import { projectCreation } from "./projects";
-
+import { todoCreation } from "./todo";
 const addProjectButton = document.querySelector(".add-project");
 const projectForm = document.querySelector(".project-creation");
 const confirmProjectButton = document.querySelector(".confirm-project")
@@ -7,14 +7,17 @@ const projectNav = document.querySelector(".projects");
 const contents = document.querySelector(".contents");
 const confirmTodoButton = document.querySelector(".confirm-todo");
 const addTodoButton = document.querySelector("#add-todo");
-const todoCreation = document.querySelector(".todo-creation");
+const todoCreationButton = document.querySelector(".todo-creation");
 let projectList = [];
 
 const loadStorage = ()=>{
     projectList = JSON.parse(localStorage.getItem("projects"));
     projectList.forEach((project)=>{
+        project.createTodo = function(title, description, dueDate, priority) {
+            this.todos.push(new todoCreation(title, description, dueDate, priority));  
+        }
         const projectTitle = document.createElement("p");
-        projectTitle.className = "project-title-list"
+        projectTitle.className = "project-title-list";
         projectTitle.textContent = project.title;
         projectNav.append(projectTitle);
         projectTitle.addEventListener("click", ()=>{
@@ -64,14 +67,14 @@ const updateContents = ()=>{
         deleteButton.addEventListener("click", ()=>{
             currentProject.todos.splice(index, 1);
             updateContents();
+            localStorage.setItem("projects", JSON.stringify(projectList));
         });
-        if(localStorage.getItem("projects")){
-            loadStorage();
-        }
+        // if(localStorage.getItem("projects")){
+        //     loadStorage();
+        // }
     })
 }
 
-console.log(projectList);
 
 confirmProjectButton.addEventListener("click", (e)=>{
     e.preventDefault();
@@ -85,27 +88,29 @@ confirmProjectButton.addEventListener("click", (e)=>{
         projectTitle.textContent = project.title;
         projectNav.append(projectTitle);
         projectTitle.addEventListener("click", ()=>{
-        currentProject = project;
-        updateContents();
+            currentProject = project;
+            updateContents();
         })
     })
     document.querySelector("#projectTitle").value = "";
+    localStorage.setItem("projects", JSON.stringify(projectList));
 })
 
 addTodoButton.addEventListener("click", ()=>{
     if(currentProject != null){
-        todoCreation.classList.toggle("display-form")
+        todoCreationButton.classList.toggle("display-form")
     }
 })
 
 confirmTodoButton.addEventListener("click", (e)=>{
     e.preventDefault();
-    todoCreation.classList.toggle("display-form");
+    todoCreationButton.classList.toggle("display-form");
     const title = document.querySelector("#title");
     const description = document.querySelector("#description");
     const dueDate = document.querySelector("#duedate");
     const priority = document.querySelector("#priority");
     currentProject.createTodo(title.value, description.value, dueDate.value, priority.value);
+    localStorage.setItem("projects", JSON.stringify(projectList));
     updateContents();
     title.value = "";
     description.value = "";
@@ -113,7 +118,3 @@ confirmTodoButton.addEventListener("click", (e)=>{
     priority.value = 1;
 }
 )
-
-if(projectList.length != 0){
-    localStorage.setItem("projects", JSON.stringify(projectList));
-}  
