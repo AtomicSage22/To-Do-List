@@ -8,8 +8,28 @@ const contents = document.querySelector(".contents");
 const confirmTodoButton = document.querySelector(".confirm-todo");
 const addTodoButton = document.querySelector("#add-todo");
 const todoCreation = document.querySelector(".todo-creation");
+let projectList = [];
 
-const projectList = [];
+const loadStorage = ()=>{
+    projectList = JSON.parse(localStorage.getItem("projects"));
+    projectList.forEach((project)=>{
+        const projectTitle = document.createElement("p");
+        projectTitle.className = "project-title-list"
+        projectTitle.textContent = project.title;
+        projectNav.append(projectTitle);
+        projectTitle.addEventListener("click", ()=>{
+            currentProject = project;
+            updateContents();
+        })
+    });
+}
+
+if(localStorage.getItem("projects")){
+    loadStorage();
+}
+
+
+
 let currentProject;
 
 addProjectButton.addEventListener("click", ()=>{
@@ -21,6 +41,7 @@ const addProjects = (project) => {
 }
 
 const updateContents = ()=>{
+    currentProject.todos.sort(function(a, b){return a.priority - b.priority});
     contents.textContent = "";
     currentProject.todos.forEach((todo, index)=>{
         const todoDiv = document.createElement("div");
@@ -44,8 +65,13 @@ const updateContents = ()=>{
             currentProject.todos.splice(index, 1);
             updateContents();
         });
+        if(localStorage.getItem("projects")){
+            loadStorage();
+        }
     })
 }
+
+console.log(projectList);
 
 confirmProjectButton.addEventListener("click", (e)=>{
     e.preventDefault();
@@ -87,3 +113,7 @@ confirmTodoButton.addEventListener("click", (e)=>{
     priority.value = 1;
 }
 )
+
+if(projectList.length != 0){
+    localStorage.setItem("projects", JSON.stringify(projectList));
+}  
