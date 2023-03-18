@@ -22,7 +22,7 @@ const addProjects = (project) => {
 
 const updateContents = ()=>{
     contents.textContent = "";
-    currentProject.todo.forEach((todo)=>{
+    currentProject.todos.forEach((todo, index)=>{
         const todoDiv = document.createElement("div");
         todoDiv.className = "to-do";
         const checkbox = document.createElement("input");
@@ -31,10 +31,19 @@ const updateContents = ()=>{
         title.className = "title";
         const description = document.createElement("p");
         description.className = "description";
+        const deleteButton = document.createElement("img");
+        deleteButton.setAttribute("src", "delete-todo.png")
+        const dueDate = document.createElement("p");
+        dueDate.className = "due-date";
+        dueDate.textContent = todo.dueDate;
         title.textContent = todo.title;
         description.textContent = todo.description;
-        todoDiv.append(checkbox, title, description);
+        todoDiv.append(checkbox, title, description, dueDate, deleteButton);
         contents.append(todoDiv);
+        deleteButton.addEventListener("click", ()=>{
+            currentProject.todos.splice(index, 1);
+            updateContents();
+        });
     })
 }
 
